@@ -1,0 +1,73 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            <link href="https://fonts.googleapis.com/css?family=Cherry+Bomb&display=swap" rel="stylesheet">
+            <style>
+                body
+                {
+                    background: powderblue;
+                    background-image: url('/static/articles/graph1.gif');
+                    background-size: auto;
+                }
+                .eachSite
+                {
+                    background-color: white;
+                    
+                    width: 75%;
+                }
+                .firstDiv
+                {
+                    background-image: url('/static/articles/money.gif');
+                    height: 40vh;
+                    width: 100vw;
+                }
+            </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm firstDiv" style="width: 100vw; color: white; text-align: center;">
+                    <h1><br/>PRODUCT PRICE COMPARISON</h1>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-3 mx-4 mb-2" style="background-color: seagreen; color: white;">
+                        <h2>Itemname: {{ itemName }}</h2>
+                </div>
+                <div class="col-md-3 mx-4 mb-2" style="background-color: seagreen; color: white;">
+                        <h2>Company: {{ companyName}}</h2>
+                </div>
+                <div class="col-md-3 mx-4 mb-2" style="background-color: seagreen; color: white;">
+                        <h2>Model: {{ modelNumber }}</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-3 mt-5 mx-3">
+                    <div class="eachSite">
+                            <img src="{% static 'articles/amazon.jpg' %}" alt="Amazon logo"
+                            style="height: 10rem; width: 100%;">
+                            <h3>Price: {{amazonPrice}}</h3>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-5 mx-3">
+                    <div class="eachSite">
+                            <img src="{% static 'articles/flipkart.jpg' %}" alt="Flipkart logo"
+                            style="height: 10rem; width: 100%;">
+                            <h3>Price: {{flipkartPrice}}</h3>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-5 mx-3">
+                    <div class="eachSite">
+                            <img src="{% static 'articles/ebay.png' %}" alt="Ebay logo"
+                            style="height: 10rem; width: 100%;">
+                            <h3>Price: {{ebayPrice}}</h3>                            
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </body>
+</html>

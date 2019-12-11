@@ -1,0 +1,15 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <h1>ARTICLE LIST</h1>
+        {% for article in articles%}
+            <div class="article">
+                <h2><a href="#">{{ article.title}}</a></h2>
+                <p>{{article.snippet}}</p>
+                <p>{{article.date}}</p>
+            </div>
+        {% endfor %}
+    </body>
+</html>
