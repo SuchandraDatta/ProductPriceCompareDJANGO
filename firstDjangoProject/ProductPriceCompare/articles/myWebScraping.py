@@ -32,41 +32,21 @@ def forebay(objForHtmlParsing):
 	print("Price on ebay: ", price[0])
 
 def generateUrl(siteName, itemName,companyName, modelNumber):
-	#MY ACTUAL USER-AGENT
-	#Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36
-
-	#url5='https://www.google.com/search?q=mouse+logitech+M337'
-	#url5='https://www.google.com/search?q=amazon+keyboard+MK345'
-	#url5='https://duckduckgo.com/?q=amazon+mouse+M377'
-	userAgent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
-	urlToOpen='https://www.google.com/search?q='+siteName+itemName+companyName+modelNumber
-	obj=urllib.request.Request(urlToOpen, headers={'User-Agent': userAgent})
-	with urllib.request.urlopen(obj) as response:
-		whatWeGetFromPage=response.read()
-	objForHtmlParsing=BeautifulSoup(whatWeGetFromPage, 'lxml')
-	allTheAnchors=objForHtmlParsing.find_all("a")
-	#allTheAnchors=['<a class="sXtWJb" href="https://www.amazon.in/LG-Fully-Automatic-Loading-Washing-FHT1207SWL-ALSPEIL/dp/B07DFT4J86" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://www.amazon.in/LG-Fully-Automatic-Loading-Washing-FHT1207SWL-ALSPEIL/dp/B07DFT4J86&amp;ved=2ahUKEwjUnaTs2o_mAhWzyDgGHc8KBN8QFjACegQIEBAI&amp;usg=AOvVaw0VxXTjiSiyQbY0DX12HFqK" oncontextmenu="google.ctpacw.cm(this)"><span class="S3Uucc">LG 7 kg Inverter Fully-Automatic Front Loading Washing Machine (FHT1207SWL.ALSPEIL, Silver, Inbuilt Heater): Amazon.in: Home &amp; Kitchen</span></a>']
-	count=0
-	for eachLink in allTheAnchors:
-				something=re.findall(r'href=\"https://www\.amazon\.in/[^\"]*', str(eachLink))
-				if(len(something)==0):
-					something=re.findall(r'href=\"https://www\.flipkart\.com/[^\"]+', str(eachLink))
-				if(len(something)==0):
-					something=re.findall(r'href=\"https://www\.ebay\.com/[^\"]*', str(eachLink))
-				
-				if(len(something)>0):
-					print(something)
-					
-				#	count=count+1
-				#if(count==1 and siteName!='ebay'):
-				#		break
-					count=count+1
-					if(count==2):
-						break
-	something=str(something[0][6:len(something[0])])
+	urlToOpen=siteName+itemName+companyName+modelNumber
+	retrievedLinks=[]
+	from googlesearch import search
+	for j in search(urlToOpen, tld="com", lang='en',num=10, start=0, stop=1, pause=5):
+		retrievedLinks.append(j)
+	something=re.findall(r'https://www\.amazon\.in/[^\"]*', str(retrievedLinks[0]))
+	if(len(something)==0):
+		something=re.findall(r'https://www\.flipkart\.com/[^\"]+', str(retrievedLinks[0]))
+	if(len(something)==0):
+		something=re.findall(r'https://www\.ebay\.com/[^\"]*', str(retrievedLinks[0]))
+	if(len(something)>0):
+		print("We got", str(something[0]))
+	#something=str(something[0][6:len(something[0])])
 	#something='\''+something+'\''
-	return something
-		#print(objForHtmlParsing)
+	return str(something[0])
 
 def startScraping(itemName, companyName, modelNumber):
  userAgent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
