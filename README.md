@@ -8,3 +8,12 @@ libraries like response. Once links are obtained we get the HTML for the page an
 to extract terms like div and CSS classes explicitly. Once the required elements are parsed we apply regex to extract the price. 
 The entire application is showcased using Django Python framework, taking input via a Django form.
 ![screen1](https://user-images.githubusercontent.com/41965125/70683596-ef2d9400-1cc8-11ea-8006-3f5e959478c9.png)
+
+Libraries and installations needed-->
+1. Python 3.6.8
+2. Django(pip install django)
+3. Urllib
+4. BeautifulSoup4
+5. googlesearch library to query Gooogle(pip install google)
+6. crispy_forms for forms for styling
+7. django_widget_tweaks(pip install django-widget-tweaks)
