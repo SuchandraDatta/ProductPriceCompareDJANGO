@@ -67,15 +67,18 @@ def startScraping(itemName, companyName, modelNumber):
 #urlList.append(generateUrl())
  for url in urlList:
   obj=urllib.request.Request(url, headers={'User-Agent': userAgent})
-  with urllib.request.urlopen(obj) as response:
-   whatWeGetFromPage=response.read()
-  objForHtmlParsing=BeautifulSoup(whatWeGetFromPage, 'lxml')
-  if(re.findall(r'/www.amazon.in/', url)):
-   forAmazon(objForHtmlParsing)
-  elif(re.findall(r'/www.flipkart.com/', url)):
-   forFlipkart(objForHtmlParsing)
-   print("We doing flipkart")
-  elif(re.findall(r'/www.ebay.com/', url)):
-   forebay(objForHtmlParsing)
- print(priceList)
+  try:
+  	with urllib.request.urlopen(obj) as response:
+   		whatWeGetFromPage=response.read()
+  	objForHtmlParsing=BeautifulSoup(whatWeGetFromPage, 'lxml')
+  	if(re.findall(r'/www.amazon.in/', url)):
+   		forAmazon(objForHtmlParsing)
+  	elif(re.findall(r'/www.flipkart.com/', url)):
+   		forFlipkart(objForHtmlParsing)
+   		print("We doing flipkart")
+  	elif(re.findall(r'/www.ebay.com/', url)):
+   		forebay(objForHtmlParsing)
+  except:
+	print("Connection error")
+  print(priceList)
  return priceList
