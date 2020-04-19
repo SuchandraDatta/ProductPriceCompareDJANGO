@@ -4,32 +4,44 @@ from bs4 import BeautifulSoup
 import re
 priceList=[]
 def forAmazon(objForHtmlParsing):
-	allID=objForHtmlParsing.find_all(id="priceblock_dealprice")#returning as a list priceblock_dealprice
-	print(allID)
-	if(len(allID)==0):
-		allID=objForHtmlParsing.find_all(id="priceblock_ourprice")
+	try:
+		allID=objForHtmlParsing.find_all(id="priceblock_dealprice")#returning as a list priceblock_dealprice
 		print(allID)
-	if(len(allID)==0):
-		allID=objForHtmlParsing.find_all("span")
-	price=re.findall(r'₹[\s]*[0-9]+\,*[0-9]+\.[0-9]+', str(allID))
-	priceList.append(price[0][2:])
-	print("Price on Amazon: ₹" ,price[0][2:])
+		if(len(allID)==0):
+			allID=objForHtmlParsing.find_all(id="priceblock_ourprice")
+			print(allID)
+		if(len(allID)==0):
+			allID=objForHtmlParsing.find_all("span")
+		price=re.findall(r'₹[\s]*[0-9]+\,*[0-9]+\.[0-9]+', str(allID))
+		priceList.append(price[0][2:])
+		print("Price on Amazon: ₹" ,price[0][2:])
+	except:
+		print("Extraction error")
+		priceList.append("Extraction error")
 
 def forFlipkart(objForHtmlParsing):
-	allTheText=objForHtmlParsing.div.get_text()
-	price=re.findall(r'₹[0-9]+\,*[0-9]*₹', str(allTheText))
-	priceList.append(price[0][:-1])
-	print("Price on FLipkart: ", price[0][:-1])
+	try:
+		allTheText=objForHtmlParsing.div.get_text()
+		price=re.findall(r'₹[0-9]+\,*[0-9]*₹', str(allTheText))
+		priceList.append(price[0][:-1])
+		print("Price on FLipkart: ", price[0][:-1])
+	except:
+		print("Extraction error")
+		priceList.append("Extraction error")
 
 def forebay(objForHtmlParsing):
 	#print(objForHtmlParsing.find_all("span"))
-	allTheSpans=objForHtmlParsing.find_all("span")
-	if(len(allTheSpans)==0):
-		allTheSpans=objForHtmlParsing.find_all("class=display-price")
-	#print(allTheSpans)
-	price=re.findall(r'INR\s+[0-9]+\,*[0-9]+\.[0-9]+', str(allTheSpans))
-	priceList.append(price[0])
-	print("Price on ebay: ", price[0])
+	try:
+		allTheSpans=objForHtmlParsing.find_all("span")
+		if(len(allTheSpans)==0):
+			allTheSpans=objForHtmlParsing.find_all("class=display-price")
+		#print(allTheSpans)
+		price=re.findall(r'INR\s+[0-9]+\,*[0-9]+\.[0-9]+', str(allTheSpans))
+		priceList.append(price[0])
+		print("Price on ebay: ", price[0])
+	except:
+		print("Extraction error")
+		priceList.append("Extraction error")
 
 def generateUrl(siteName, itemName,companyName, modelNumber):
 	urlToOpen=siteName+itemName+companyName+modelNumber
@@ -65,20 +77,23 @@ def startScraping(itemName, companyName, modelNumber):
 #urlList=generateUrl()
 #print(urlList)
 #urlList.append(generateUrl())
+ i=-1
  for url in urlList:
   obj=urllib.request.Request(url, headers={'User-Agent': userAgent})
+  i=i+1
   try:
-  	with urllib.request.urlopen(obj) as response:
-   		whatWeGetFromPage=response.read()
-  	objForHtmlParsing=BeautifulSoup(whatWeGetFromPage, 'lxml')
-  	if(re.findall(r'/www.amazon.in/', url)):
-   		forAmazon(objForHtmlParsing)
-  	elif(re.findall(r'/www.flipkart.com/', url)):
-   		forFlipkart(objForHtmlParsing)
-   		print("We doing flipkart")
-  	elif(re.findall(r'/www.ebay.com/', url)):
-   		forebay(objForHtmlParsing)
+   with urllib.request.urlopen(obj) as response:
+     whatWeGetFromPage=response.read()
+   #print("Response.read==", whatWeGetFromPage)#Amazon causing some scraping problems, keeps detecting a robot
+   objForHtmlParsing=BeautifulSoup(whatWeGetFromPage, 'lxml')
+   if(re.findall(r'/www.amazon.in/', url)):
+    forAmazon(objForHtmlParsing)
+   elif(re.findall(r'/www.flipkart.com/', url)):
+    forFlipkart(objForHtmlParsing)
+   elif(re.findall(r'/www.ebay.com/', url)):
+   	forebay(objForHtmlParsing)
   except:
-	print("Connection error")
+   print("Connection error")
+   priceList.append("Connection error")
   print(priceList)
  return priceList
